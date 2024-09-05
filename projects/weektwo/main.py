@@ -83,12 +83,11 @@ def main():
     # Write the encrypted contents back to the file
     write_file(file_path, encrypted.decode('utf-8'))
 
-    # Decryption Content
-    try:
-        decrypted = cipher.decrypt(modified_content)
-        print(f"{bold_start}Decrypted content:{bold_end} {decrypted}\n")
-    except Exception as e:
-        print(f"{bold_start}Decryption failed:{bold_end} {e}\n")
+    # Display Content
+    if encrypted != encrypted_modified:
+        print(f"{bold_start}File Status:{bold_end} Corrupted File\n")
+    else:
+        print(f"{bold_start}File Status:{bold_end} Uncorrupted File\n")
 
 if __name__ == "__main__":
     main()
