@@ -78,14 +78,11 @@ def main():
     # Read the modified contents
     modified_content = read_file(file_path)
 
-    # Encrypted Modified File Content
-    encrypted_modified = cipher.encrypt(modified_content)
-    print(f"{bold_start}Encrypted Modified Content:{bold_end} {encrypted_modified.decode('utf-8')}\n")
-    # Write the encrypted contents back to the file
-    write_file(file_path, encrypted.decode('utf-8'))
-
-    # Display Content
-    if encrypted != encrypted_modified:
+    # Decrypted Content
+    decrypted_content = cipher.decrypt(encrypted)
+    print(f"{bold_start}Decrypted Original Content:{bold_end} {decrypted_content}\n")
+    # Check if the current file content matches the decrypted original content
+    if modified_content != decrypted_content:
         print(f"{bold_start}File Status:{bold_end} Corrupted File\n")
     else:
         print(f"{bold_start}File Status:{bold_end} Uncorrupted File\n")
