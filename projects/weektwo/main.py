@@ -21,6 +21,7 @@ class AESCipher(object):
         """Encrypts a plaintext message."""
         raw = self._pad(raw)
         iv = Random.new().read(AES.block_size)
+        # Uses Dynamic IV making it harder to predict what the charactors mean.
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
         return base64.b64encode(iv + cipher.encrypt(raw.encode()))
 
