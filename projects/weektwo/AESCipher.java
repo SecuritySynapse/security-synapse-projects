@@ -87,7 +87,7 @@ public class AESCipher {
     public static void main(String[] args) {
         try {
             String key = "mysecretpassword";  // Define the encryption key
-            String filePath = "files/example_one.txt";  // Path to the file to be encrypted
+            String filePath = "python_anti_malware/files/example_one.txt";  // Path to the file to be encrypted
             AESCipher aesCipher = new AESCipher(key);  // Create a new AESCipher object
 
             // Read the original content of the file
