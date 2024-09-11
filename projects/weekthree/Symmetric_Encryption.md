@@ -12,7 +12,3 @@ cipher text and key for decrypting later.
 3. Windows: `venv/Scripts/Activate` Linux: `source venv/bin/activate`
 4. `pip install -r requirements.txt`
 5. `python main.py`
-
-### How to run java implementation
-
-Command: ``
