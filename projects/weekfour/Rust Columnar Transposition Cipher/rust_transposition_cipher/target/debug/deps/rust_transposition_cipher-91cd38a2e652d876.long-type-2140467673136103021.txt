@@ -1,1 +1,0 @@
-Map<Enumerate<core::slice::iter::Iter<'_, usize>>, {closure@src/main.rs:24:54: 24:62}>
