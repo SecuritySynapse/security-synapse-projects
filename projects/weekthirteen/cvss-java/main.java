@@ -40,12 +40,20 @@ public class Main {
   public static void main(String[] args) {
     System.out.println("Randomized representation of a CVSS scoring.");
     // Generate if S is True or False
-    // Print
+    if Math.random() < 0.5 {
+        boolean S = False;
+    }
+    else {
+        boolean S = True;
+    }
+    // Print Scope
+    System.out.println("The vulnerable component and the impacted component are the same: " + S);
     // Generate Impact scores
-    // Print
+    float C = Math.random() + 10;
+    // Print Impact Scores
     // Calculate SC
     // Generate AV, AC, PR, and UI
-    // Print
+    // Print Exploitability scores
     // Calculate Expoitability subscore
     // Calculate base score
     // Print 
