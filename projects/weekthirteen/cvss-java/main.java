@@ -3,6 +3,7 @@
 import java.util.Math;
 
 /*
+using the calculator here: https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N&version=3.1
 Base variables:
 (Expoitability)
 AV Attack Vector
@@ -37,25 +38,47 @@ Where,
 */
 
 public class Main {
-  public static void main(String[] args) {
-    System.out.println("Randomized representation of a CVSS scoring.");
-    // Generate if S is True or False
-    if Math.random() < 0.5 {
-        boolean S = False;
+    public static float randomFloat() {
+        // initialize value
+        float value = random() * 10.0;
+        // truncate value
+        value = value * pow(10, 1); 
+        value = floor(value); 
+        value = value / pow(10, 1); 
+        return value;
     }
-    else {
-        boolean S = True;
+
+    public static void printRating(float score){
+        System.out.print()
     }
-    // Print Scope
-    System.out.println("The vulnerable component and the impacted component are the same: " + S);
-    // Generate Impact scores
-    float C = Math.random() + 10;
-    // Print Impact Scores
-    // Calculate SC
-    // Generate AV, AC, PR, and UI
-    // Print Exploitability scores
-    // Calculate Expoitability subscore
-    // Calculate base score
-    // Print 
+
+    public static void main(String[] args) {
+        System.out.println("Randomized representation of a CVSS scoring.");
+        // Generate if S is True or False
+        if Math.random() < 0.5 {
+            boolean S = False;
+        }
+        else {
+            boolean S = True;
+        }
+        // Print Scope
+        System.out.println("The vulnerable component and the impacted component are the same: " + S.toString());
+        // Generate Impact scores
+        float C = randomFloat();
+        float I = randomFloat();
+        float A = randomFloat();
+        // Print Impact Scores
+        System.out.printf("The loss of confidentiality from the impacted component: %d\n", C);
+        printRating(C);
+        System.out.printf("The loss of integrity from the impacted component: %d\n", I);
+        printRating(I);
+        System.out.printf("The loss of availability from the impacted component: %d\n", A);
+        printRating(A);
+        // Calculate SC
+        // Generate AV, AC, PR, and UI
+        // Print Exploitability scores
+        // Calculate Expoitability subscore
+        // Calculate base score
+        // Print 
   }
 }
