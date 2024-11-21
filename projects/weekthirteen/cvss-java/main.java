@@ -1,7 +1,5 @@
 // Defines a program that randomly generates a CVSS score
 
-//import java.util.Math;
-
 /*
 using the calculator here: https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N&version=3.1
 Base variables:
@@ -25,7 +23,7 @@ In order to calculate base score, without temporal or environmental
 and the Impact subscore (ISC) is defined as,
 
     Scope Unchanged 6.42 × 𝐼𝑆𝐶Base
-    Scope Changed 7.52 × [𝐼𝑆𝐶𝐵𝑎𝑠𝑒 − 0.029] − 3.25 × [𝐼𝑆𝐶𝐵𝑎𝑠𝑒 − 0.02]15
+    Scope Changed 7.52 × [𝐼𝑆𝐶𝐵𝑎𝑠𝑒 − 0.029] − 3.25 × [𝐼𝑆𝐶𝐵𝑎𝑠𝑒 − 0.02]^15
 
 Where,
 
@@ -45,13 +43,19 @@ public class Main {
         return true;
     }
 
+    public static float truncateFloat(float value, int decimals) {
+        float result = value;
+        result = result * (float)Math.pow(10, decimals); 
+        result = (float)Math.floor(result); 
+        result = result / (float)Math.pow(10, decimals); 
+        return result;
+    }
+
     public static float randomFloat() {
         // initialize value
         float value = (float)Math.random() * (float)10.0;
         // truncate value to 3 places after the decimal
-        value = value * (float)Math.pow(10, 3); 
-        value = (float)Math.floor(value); 
-        value = value / (float)Math.pow(10, 3); 
+        value = truncateFloat(value, 3);
         return value;
     }
 
@@ -67,6 +71,14 @@ public class Main {
         } else {
             System.out.println("This is a severity of zero. There is no vulnerability/concern.");
         }     
+    }
+
+    public static float subscoreCalc(boolean scope, float baseISC) {
+        if (scope == true) {
+            return truncateFloat((float)6.42 * baseISC, 3);
+        }
+        float value = (float)7.52 * (baseISC - (float)0.029) - (float)3.25 * (float)Math.pow((baseISC - (float)0.02), 15);
+        return truncateFloat(value, 3);
     }
 
     public static void main(String[] args) {
@@ -88,11 +100,42 @@ public class Main {
         System.out.printf("The loss of availability from the impacted component: %.3f\n", A);
         printRating(A);
         // Calculate ISC subscore
-        //float 
+        float ISC = (float)1.0 - (((float)1.0 - C) * ((float)1.0 - I) * ((float)1.0 - A));
+        float subscoreISC = subscoreCalc(S, ISC);
         // Generate AV, AC, PR, and UI
+        float AV = randomFloat();
+        float AC = randomFloat();
+        float PR = randomFloat();
+        float UI = randomFloat();
         // Print Exploitability scores
+        System.out.printf("Attack Vector, the necessary proximity for the attack(higher value is a farther distance): %.3f\n", AV);
+        printRating(AV);
+        System.out.printf("Attack Complexity: %.3f\n", AC);
+        printRating(AC);
+        System.out.printf("Privileges Required to perform the attack(higher value is fewer privileges): %.3f\n", PR);
+        printRating(PR);
+        System.out.printf("User Interaction, how much a target must do/interact with(higher value is less interaction): %.3f\n", UI);
+        printRating(UI);
         // Calculate Expoitability subscore
-        // Calculate base score
-        // Print 
+        float exploit = (float)8.22 * AV * AC * PR * UI;
+        // Calculate and print base score
+        /*
+         If (Impact subscore <= 0)     0 else,
+    Scope Unchanged4                 𝑅𝑜𝑢𝑛𝑑𝑢𝑝(𝑀𝑖𝑛𝑖𝑚𝑢𝑚[(𝐼𝑚𝑝𝑎𝑐𝑡 + 𝐸𝑥𝑝𝑙𝑜𝑖𝑡𝑎𝑏𝑖𝑙𝑖𝑡𝑦), 10])
+    Scope Changed                      𝑅𝑜𝑢𝑛𝑑𝑢𝑝(𝑀𝑖𝑛𝑖𝑚𝑢𝑚[1.08 × (𝐼𝑚𝑝𝑎𝑐𝑡 + 𝐸𝑥𝑝𝑙𝑜𝑖𝑡𝑎𝑏𝑖𝑙𝑖𝑡𝑦), 10])
+        */
+        if (subscoreISC <= 0) {
+            System.out.println("Impact is less than or equal to zero, therefore the score is zero.\nNo source of concern.");
+        } else {
+            if (S == true) {
+                float baseScore = truncateFloat(Math.min(subscoreISC + exploit, 10), 1);
+                System.out.printf("\nBase score: %.1f\n", baseScore);
+                printRating(baseScore);
+            } else {
+                float baseScore = truncateFloat(Math.min((float)1.08 * (subscoreISC + exploit), 10), 1);
+                System.out.printf("\nBase score: %.1f\n", baseScore);
+                printRating(baseScore);
+            }
+        }
   }
 }
