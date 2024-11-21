@@ -1,6 +1,6 @@
 // Defines a program that randomly generates a CVSS score
 
-import java.util.Math;
+//import java.util.Math;
 
 /*
 using the calculator here: https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N&version=3.1
@@ -38,43 +38,57 @@ Where,
 */
 
 public class Main {
+    public static boolean scopeGen(){
+        if (Math.random() < 0.5) {
+            return false;
+        }
+        return true;
+    }
+
     public static float randomFloat() {
         // initialize value
-        float value = random() * 10.0;
-        // truncate value
-        value = value * pow(10, 1); 
-        value = floor(value); 
-        value = value / pow(10, 1); 
+        float value = (float)Math.random() * (float)10.0;
+        // truncate value to 3 places after the decimal
+        value = value * (float)Math.pow(10, 3); 
+        value = (float)Math.floor(value); 
+        value = value / (float)Math.pow(10, 3); 
         return value;
     }
 
     public static void printRating(float score){
-        System.out.print()
+        if (score >= 9.0){
+            System.out.println("This is critical severity; the highest level of concern.");
+        } else if (score >= 7.0) {
+            System.out.println("This is high severity; the second highest level of concern.");
+        } else if (score >= 4.0) {
+            System.out.println("This is medium severity; it's the middling level of concern.");
+        } else if (score >= 0.1) {
+            System.out.println("This is low severity; there is only a small level of concern.");
+        } else {
+            System.out.println("This is a severity of zero. There is no vulnerability/concern.");
+        }     
     }
 
     public static void main(String[] args) {
         System.out.println("Randomized representation of a CVSS scoring.");
         // Generate if S is True or False
-        if Math.random() < 0.5 {
-            boolean S = False;
-        }
-        else {
-            boolean S = True;
-        }
+        boolean S = scopeGen();
         // Print Scope
-        System.out.println("The vulnerable component and the impacted component are the same: " + S.toString());
+        System.out.print("The vulnerable component and the impacted component are the same: ");
+        System.out.println(S);
         // Generate Impact scores
         float C = randomFloat();
         float I = randomFloat();
         float A = randomFloat();
         // Print Impact Scores
-        System.out.printf("The loss of confidentiality from the impacted component: %d\n", C);
+        System.out.printf("The loss of confidentiality from the impacted component: %.3f\n", C);
         printRating(C);
-        System.out.printf("The loss of integrity from the impacted component: %d\n", I);
+        System.out.printf("The loss of integrity from the impacted component: %.3f\n", I);
         printRating(I);
-        System.out.printf("The loss of availability from the impacted component: %d\n", A);
+        System.out.printf("The loss of availability from the impacted component: %.3f\n", A);
         printRating(A);
-        // Calculate SC
+        // Calculate ISC subscore
+        //float 
         // Generate AV, AC, PR, and UI
         // Print Exploitability scores
         // Calculate Expoitability subscore
