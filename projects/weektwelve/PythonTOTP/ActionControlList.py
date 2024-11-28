@@ -1,5 +1,3 @@
-# Sample Access Control List (ACL) in Python
-
 class AccessControlList:
     def __init__(self):
         # Define roles and their permissions
